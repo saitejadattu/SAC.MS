@@ -4,14 +4,14 @@ const authenticateToken = require("../middleware");
 
 
 router.post("/submit", authenticateToken, async (req, res) => {
-    const {user_id, reason, status, created_at} = req.body;
+    const {user_id, reason} = req.body;
     try {
-        if (!user_id || !reason || !status || !created_at) {
+        if (!user_id || !reason) {
             return res.status(400).json({ msg: "All fields are required" });
         }
         const { data, error } = await supabase
             .from("permission_slips")
-            .insert([{ user_id, reason, status, created_at }]);
+            .insert([{ user_id, reason }]);
         if (error) {
             throw error;
         }
