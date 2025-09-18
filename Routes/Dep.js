@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const supabase = require("../supaBaseClient");
+const authenticateToken = require("../middleware");
 
-
-router.get("/all", async (req, res) => {
+router.get("/all",authenticateToken, async (req, res) => {
   try {
     const { data, error } = await supabase
         .from("departments")
@@ -17,7 +17,7 @@ router.get("/all", async (req, res) => {
   } 
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add",authenticateToken, async (req, res) => {
   const { name } = req.body;
   try {
     if (!name) {

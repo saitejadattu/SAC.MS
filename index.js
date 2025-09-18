@@ -4,6 +4,7 @@ const supabase = require("./supaBaseClient");
 const dotenv = require("dotenv");
 const auth_router = require('./Routes/Auth');
 const dep_router = require('./Routes/Dep');
+const permissionSlip_router = require('./Routes/PermissionSlip');
 dotenv.config({ quiet: true });
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/auth', auth_router);
 app.use('/department', dep_router);
+app.use('/permission-slip', permissionSlip_router);
 
 async function connectAndVerify() {
   try {
