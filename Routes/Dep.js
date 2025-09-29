@@ -1,23 +1,23 @@
 const router = require("express").Router();
 const supabase = require("../supaBaseClient");
-const authenticateToken = require("../middleware");
+const { authenticateToken, role_permission } = require("../middleware");
 
-router.get("/all",authenticateToken, async (req, res) => {
+router.get("/all", authenticateToken, role_permission("HOD", "HR", "President"), async (req, res) => {
   try {
-    const { data, error } = await supabase
-        .from("departments")
-        .select("*");
+    const { data, error } = await supabase.from("departments").select("*");
     if (error) {
       throw error;
     }
-    return res.status(200).json({ msg: "Departments fetched successfully", data: data });
+    return res
+      .status(200)
+      .json({ msg: "Departments fetched successfully", data: data });
   } catch (error) {
     console.error("Error fetching departments:", error.message);
     return res.status(500).json({ msg: "Internal Server Error" });
-  } 
+  }
 });
 
-router.post("/add",authenticateToken, async (req, res) => {
+router.post("/add", authenticateToken, role_permission("HR Member", "President"), async (req, res) => {
   const { name } = req.body;
   try {
     if (!name) {
@@ -37,6 +37,5 @@ router.post("/add",authenticateToken, async (req, res) => {
     return res.status(500).json({ msg: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;

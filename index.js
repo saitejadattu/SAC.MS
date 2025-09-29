@@ -5,9 +5,11 @@ const dotenv = require("dotenv");
 const auth_router = require('./Routes/Auth');
 const dep_router = require('./Routes/Dep');
 const permissionSlip_router = require('./Routes/PermissionSlip');
+const morgan = require("morgan");
 dotenv.config({ quiet: true });
 
 const app = express();
+app.use(morgan("dev"))
 app.use(cors());
 app.use(express.json());
 app.use('/auth', auth_router);

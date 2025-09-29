@@ -4,12 +4,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 router.post("/register", async (req, res) => {
   const { email, full_name, password, role_id, department_id } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     if (!email || !full_name || !password || !role_id || !department_id) {
       return res.status(400).json({ msg: "All fields are required" });
     }
-    const password_hash = await bcrypt.hash(password, 10);
+    const password_hash = await bcrypt.hash(password, 16);
     // console.log(hashedPassword) // Implement password hashing here
     const { data, error } = await supabase
       .from("users")
@@ -45,7 +45,11 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ msg: "Invalid credentials" });
   }
   const jwtToken = jwt.sign(
-    { id: isUser.data.id, email: isUser.data.email, role_id: isUser.data.role_id },
+    {
+      id: isUser.data.id,
+      email: isUser.data.email,
+      role_id: isUser.data.role_id,
+    },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
